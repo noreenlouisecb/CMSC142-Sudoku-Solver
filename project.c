@@ -23,7 +23,7 @@ int main(){
 	int **option;
 	zeroList *posZero;
 
-	FILE *fp = fopen("input2.txt", "r+");
+	FILE *fp = fopen("input1.txt", "r+");
 	FILE *fp2 = fopen("output.txt", "w+");
 	fscanf(fp, "%d", &puzzleCount);
 
@@ -107,6 +107,32 @@ int sqrChecker(int candidate, zeroList posZero, int **puzzle, int size) {
 	return 1;
 }
 
+int xChecker(int candidate, zeroList posZero, int **puzzle, int size) {
+	if (posZero.x == posZero.y) {
+		int ii;
+		for(ii = 0; ii < size*size; ii++) {
+			if (candidate ==  puzzle[ii][ii])
+				return 0;
+		}
+	}
+
+	if ((posZero.x + posZero.y) == size*size - 1) {
+		int ii, jj;
+		for(ii = 0, jj = size*size - 1; ii < size*size && jj >= 0; ii++, jj--) {
+			if (candidate ==  puzzle[ii][jj])
+				return 0;
+		}
+	}
+	return 1;
+}
+
+int candidateChecker(int candidate, zeroList posZero, int **puzzle, int size) {
+	return sqrChecker(candidate, posZero, puzzle, size) &&
+		rowChecker(candidate, posZero, puzzle, size) &&
+		colChecker(candidate, posZero, puzzle, size) &&
+		xChecker(candidate, posZero, puzzle, size);
+}
+
 void solveSudoku(int **puzzle, int size, int **nopts, int ***option, int zeroCount, zeroList **posZero, int *solutionCount, FILE *fp){
 	int start, move;
 	int row, col, sqr, candidate, i, j, k;
@@ -138,24 +164,20 @@ void solveSudoku(int **puzzle, int size, int **nopts, int ***option, int zeroCou
 				fprintf(fp, "\n");
 			} else if(move == 1) {
 				for(candidate = size*size; candidate >=1; candidate --) {
-					row = rowChecker(candidate, (*posZero)[move-1], puzzle, size);
-					col = colChecker(candidate, (*posZero)[move-1], puzzle, size);
-					sqr = sqrChecker(candidate, (*posZero)[move-1], puzzle, size);
-					if(row && col && sqr) {
+					if(candidateChecker(candidate, (*posZero)[move-1], puzzle, size)) {
 						(*nopts)[move]++;
 						(*option)[move][(*nopts)[move]] = candidate;
 					}
 				}
 			} else{
 				for(candidate=size*size; candidate >= 1; candidate--) {
-					row = rowChecker(candidate, (*posZero)[move-1], puzzle, size);
-					col = colChecker(candidate, (*posZero)[move-1], puzzle, size);
-					sqr = sqrChecker(candidate, (*posZero)[move-1], puzzle, size);
-					if(row && col && sqr) {
-						for(i = move-1; i >= 1;i--)
+					if(candidateChecker(candidate, (*posZero)[move-1], puzzle, size)) {
+						for(i = move-1; i >= 1;i--) {
 						if(candidate==(*option)[i][(*nopts)[i]] && ((*posZero)[i-1].y==(*posZero)[move-1].y ||
 							(*posZero)[i-1].x==(*posZero)[move-1].x || ((int)((*posZero)[i-1].y/size)==(int)((*posZero)[move-1].y/size) &&
 								(int)((*posZero)[i-1].x/size)==(int)((*posZero)[move-1].x/size)))) break;
+
+						}
 						if(!(i>=1)) (*option)[move][++((*nopts)[move])] = candidate;
 					}
 				}
