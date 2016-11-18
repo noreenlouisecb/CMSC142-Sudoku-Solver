@@ -133,6 +133,12 @@ int candidateChecker(int candidate, zeroList posZero, int **puzzle, int size) {
 		xChecker(candidate, posZero, puzzle, size);
 }
 
+int isAligned(zeroList pos1, zeroList pos2, int size) {
+	return pos1.y==pos2.y || pos1.x==pos2.x || ((int)(pos1.y/size)==(int)(pos2.y/size) && 
+		(int)(pos1.x/size)==(int)(pos2.x/size)) || 
+		(pos1.x == pos1.y && pos2.x == pos2.y);
+}
+
 void solveSudoku(int **puzzle, int size, int **nopts, int ***option, int zeroCount, zeroList **posZero, int *solutionCount, FILE *fp){
 	int start, move;
 	int row, col, sqr, candidate, i, j, k;
@@ -173,9 +179,7 @@ void solveSudoku(int **puzzle, int size, int **nopts, int ***option, int zeroCou
 				for(candidate=size*size; candidate >= 1; candidate--) {
 					if(candidateChecker(candidate, (*posZero)[move-1], puzzle, size)) {
 						for(i = move-1; i >= 1;i--) {
-						if(candidate==(*option)[i][(*nopts)[i]] && ((*posZero)[i-1].y==(*posZero)[move-1].y ||
-							(*posZero)[i-1].x==(*posZero)[move-1].x || ((int)((*posZero)[i-1].y/size)==(int)((*posZero)[move-1].y/size) &&
-								(int)((*posZero)[i-1].x/size)==(int)((*posZero)[move-1].x/size)))) break;
+						if(candidate==(*option)[i][(*nopts)[i]] && isAligned((*posZero)[i-1], (*posZero)[move-1], size)) break;
 
 						}
 						if(!(i>=1)) (*option)[move][++((*nopts)[move])] = candidate;
