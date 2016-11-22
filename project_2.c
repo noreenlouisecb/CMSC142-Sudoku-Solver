@@ -8,6 +8,7 @@ typedef struct node {
 
 void setup(int ***, int ***, FILE *, int *, int *, zeroList **, int **, int ***);
 void printPuzzle(int **, int);
+int checkPuzzle(int **, int, int);
 void solveSudoku(int **, int, int **, int ***, int, zeroList **, int *, FILE *);
 int rowChecker(int, zeroList, int **, int);
 int colChecker(int, zeroList, int **, int);
@@ -15,9 +16,6 @@ int sqrChecker(int, zeroList, int **, int);
 int xChecker(int, zeroList, int **, int);
 int yChecker(int, zeroList, int **, int);
 int yChkDuplicate(int, int, zeroList, zeroList, int);
-int xCheckerInit(int **, int);
-int yCheckerInit(int **, int);
-
 
 int type;
 int main() {
@@ -31,7 +29,7 @@ int main() {
 	zeroList *posZero;
 
 
-	FILE *fp = fopen("input2.txt", "r+");
+	FILE *fp = fopen("input.txt", "r+");
 	FILE *fp2 = fopen("output.txt", "w+");
 	fscanf(fp, "%d", &puzzleCount);
 
@@ -41,9 +39,10 @@ int main() {
 	for(i = 0; i < puzzleCount; i++) {
 		zeroCount = 0, solutionCount = 0;
 		setup(&puzzle, &solution, fp, &size, &zeroCount, &posZero, &nopts, &option);
-		if(xCheckerInit(puzzle, size) == 1) printf("init: X correct");
-		if(yCheckerInit(puzzle, size) == 1) printf("init: Y correct");
-		solveSudoku(puzzle, size, &nopts, &option, zeroCount, &posZero, &solutionCount, fp2);
+		if(checkPuzzle(puzzle, type, size)) {
+			//printf("heyheyyy\n\n");
+			solveSudoku(puzzle, size, &nopts, &option, zeroCount, &posZero, &solutionCount, fp2);
+		}
 		printf("Number of Solutions: %2d\n", solutionCount);
 		fprintf(fp2, "Number of Solutions: %2d\n", solutionCount);
 		free(posZero);
@@ -88,6 +87,61 @@ void setup(int ***puzzle, int ***solution, FILE *fp, int *size2, int *zeroCount,
 	}
 }
 
+int checkPuzzle(int **puzzle, int type, int size) {
+	int i, j, k, counter;
+	switch(type) {
+		case 2:
+				for(i = 1, counter = 0; i <= size*size; i++, counter = 0) {
+					for(j = 0, k = 0; j < size*size; j++, k++) if(puzzle[j][k] == i) counter++;
+					if(counter > 1) return 0;
+				}
+
+				for(i = 1, counter = 0; i <= size*size; i++, counter = 0) {
+					for(j = (size*size)-1, k = 0; j >= 0; j--, k++) if(puzzle[j][k] == i) counter++;
+					if(counter > 1) return 0;
+				}
+				break;
+		case 3:
+			 for(i = 1, counter = 0; i <= size*size; i++, counter = 0) {
+					for(j = 0, k = 0; j < (size*size)/2; j++, k++) if(puzzle[j][k] == i) counter++;
+					for(j = (size*size)/2, k = (size*size)/2; j < (size*size); j++) if(puzzle[j][k] == i) counter++;
+					if(counter > 1) return 0;
+				}
+
+				for(i = 1, counter = 0; i <= size*size; i++, counter = 0) {
+ 					for(j = (size*size)/2-1, k = (size*size)/2+1; j >= 0; j--, k++) if(puzzle[j][k] == i) counter++;
+ 					for(j = (size*size)/2, k = (size*size)/2; j < (size*size); j++) if(puzzle[j][k] == i) counter++;
+ 					if(counter > 1) return 0;
+ 				}
+				break;
+		case 4:
+				for(i = 1, counter = 0; i <= size*size; i++, counter = 0) {
+					for(j = 0, k = 0; j < size*size; j++, k++) if(puzzle[j][k] == i) counter++;
+					if(counter > 1) return 0;
+				}
+
+				for(i = 1, counter = 0; i <= size*size; i++, counter = 0) {
+					for(j = (size*size)-1, k = 0; j >= 0; j--, k++) if(puzzle[j][k] == i) counter++;
+					if(counter > 1) return 0;
+				}
+
+				for(i = 1, counter = 0; i <= size*size; i++, counter = 0) {
+ 					for(j = 0, k = 0; j < (size*size)/2; j++, k++) if(puzzle[j][k] == i) counter++;
+ 					for(j = (size*size)/2, k = (size*size)/2; j < (size*size); j++) if(puzzle[j][k] == i) counter++;
+ 					if(counter > 1) return 0;
+ 				}
+
+ 				for(i = 1, counter = 0; i <= size*size; i++, counter = 0) {
+  					for(j = (size*size)/2-1, k = (size*size)/2+1; j >= 0; j--, k++) if(puzzle[j][k] == i) counter++;
+  					for(j = (size*size)/2, k = (size*size)/2; j < (size*size); j++) if(puzzle[j][k] == i) counter++;
+  					if(counter > 1) return 0;
+  				}
+ 				break;
+	}
+
+	return 1;
+}
+
 int rowChecker(int candidate, zeroList posZero, int **puzzle, int size) {
 	int i, x = posZero.x;
 	for(i = 0; i<size*size; i++){
@@ -119,65 +173,16 @@ int sqrChecker(int candidate, zeroList posZero, int **puzzle, int size) {
 	return 1;
 }
 
-int xCheckerInit(int **puzzle, int size){
-	int i, j, k, counter = 0;;
-	for(k = 1; k <= size*size; k++){
-		counter = 0;
-		for(j = 0, i = 0; j < size*size;i++, j++){
-			if(puzzle[i][j] == k) counter++;
-			if(counter > 1) return 0;
-		}
-		counter = 0;
-		for(j = size*size-1, i = 0; i < size*size;i++, j--){
-			if(puzzle[i][j] == k) counter++;
-			if(counter > 1) return 0;
-		}
-	}
-	return 1;
-}
-
 int xChecker(int candidate, zeroList posZero, int **puzzle, int size) {
 	int i, j, x = posZero.x, y = posZero.y;
-	if((x == y) || ((x+y) == size - 1)) {
-		for(i = 0, j = 0; i <size; i++, j++){
+	if((x == y) || ((x+y) == (size*size) - 1)) {
+		for(i = 0, j = 0; i <(size*size); i++, j++){
 			if(candidate == puzzle[i][j])
 				return 0;
 		}
-		for(i = size-1, j = 0; i >=0; i--, j++){
+		for(i = (size*size)-1, j = 0; i >=0; i--, j++){
 			if(candidate == puzzle[i][j])
 				return 0;
-		}
-	}
-	return 1;
-}
-
-
-int yCheckerInit(int **puzzle, int size){
-	int i, j, k, counter = 0;;
-	for(k = 1; k <= size*size; k++){
-		counter = 0;
-		j = i = 0;
-		while(i < size*size){
-			if(puzzle[i][j] == k) counter++;
-			if(counter > 1) return 0;
-			
-			if(j != ((size*size)-1)/2){
-				j++;
-			} 
-			i++;	
-		}
-		
-		counter = 0;
-		i = 0;
-		j = size*size-1;
-		while(i < size*size){
-			if(puzzle[i][j] == k) counter++;
-			if(counter > 1) return 0;
-			
-			if(j != ((size*size)-1)/2){
-				j--;
-			} 
-			i++;	
 		}
 	}
 	return 1;
@@ -187,20 +192,20 @@ int yChecker(int candidate, zeroList posZero, int **puzzle, int size) {
 	int i, j, x = posZero.x, y = posZero.y;
 	if(size%2 == 0) return 0;
 
-	if((x == y || (x+y) == size - 1) && x <= size/2) {
-		for(i = 0, j = 0; i < size/2; i++, j++){
+	if((x == y || (x+y) == (size*size) - 1) && x <= (size*size)/2) {
+		for(i = 0, j = 0; i < (size*size)/2; i++, j++){
 			if(candidate == puzzle[i][j])
 				return 0;
 		}
-		for(i = size/2, j = size/2; i < size; i++) {
+		for(i = (size*size)/2, j = (size*size)/2; i < (size*size); i++) {
 			if(candidate == puzzle[i][j])
 				return 0;
 		}
-		for(i = (size/2)-1, j = (size/2)+1; i >=0; i--, j++){
+		for(i = ((size*size)/2)-1, j = ((size*size)/2)+1; i >=0; i--, j++){
 			if(candidate == puzzle[i][j])
 				return 0;
 		}
-		for(i = size/2, j = size/2; i < size; i++) {
+		for(i = (size*size)/2, j = (size*size)/2; i < (size*size); i++) {
 			if(candidate == puzzle[i][j])
 				return 0;
 		}
@@ -213,12 +218,12 @@ int yChkDuplicate(int candidate, int option, zeroList move, zeroList checksol, i
 		if(checksol.x == checksol.y){
 			if(candidate == option) return 0;}
 	}
-	if(move.x + move.y == size - 1){
-		if(checksol.x + checksol.y == size - 1){
+	if(move.x + move.y == (size*size) - 1){
+		if(checksol.x + checksol.y == (size*size) - 1){
 			if(candidate == option) return 0;}
 	}
-	if(move.x == checksol.x){
-		if(move.x > size/2){
+	if(move.y == checksol.y){
+		if(move.x > (size*size)/2){
 		if(candidate == option) return 0;}
 	}
 	return 1;
@@ -285,7 +290,7 @@ void solveSudoku(int **puzzle, int size, int **nopts, int ***option, int zeroCou
 								(*posZero)[i-1].x==(*posZero)[move-1].x || ((int)((*posZero)[i-1].y/size)==(int)((*posZero)[move-1].y/size) &&
 									(int)((*posZero)[i-1].x/size)==(int)((*posZero)[move-1].x/size)))) break;
 							if(((((*posZero)[move-1].x == (*posZero)[move-1].y && (*posZero)[i-1].x == (*posZero)[i-1].y) ||
-								((*posZero)[move-1].x + (*posZero)[move-1].y == size - 1 && (*posZero)[i-1].x + (*posZero)[i-1].y == size - 1))) &&
+								((*posZero)[move-1].x + (*posZero)[move-1].y == (size*size) - 1 && (*posZero)[i-1].x + (*posZero)[i-1].y == (size*size) - 1))) &&
 								(candidate==(*option)[i][(*nopts)[i]])) break;
 						}
 						if(!(i>=1)) (*option)[move][++((*nopts)[move])] = candidate;
@@ -296,7 +301,27 @@ void solveSudoku(int **puzzle, int size, int **nopts, int ***option, int zeroCou
 							if(candidate==(*option)[i][(*nopts)[i]] && ((*posZero)[i-1].y==(*posZero)[move-1].y ||
 								(*posZero)[i-1].x==(*posZero)[move-1].x || ((int)((*posZero)[i-1].y/size)==(int)((*posZero)[move-1].y/size) &&
 									(int)((*posZero)[i-1].x/size)==(int)((*posZero)[move-1].x/size)))) break;
-									// if(yChkDuplicate(candidate, (*option)[i][(*nopts)[i]], (*posZero)[move-1], (*posZero)[i-1], size)) break;
+
+							if((((*posZero)[move-1].x == (*posZero)[move-1].y && (*posZero)[i-1].x == (*posZero)[i-1].y && (*posZero)[move-1].x < (size*size)/2 && (*posZero)[i-1].x < (size*size)/2) ||
+								((*posZero)[move-1].x + (*posZero)[move-1].y == (size*size) - 1 && (*posZero)[i-1].x + (*posZero)[i-1].y == (size*size) - 1 && (*posZero)[move-1].x < (size*size)/2 && (*posZero)[i-1].x < (size*size)/2)) &&
+								((*posZero)[move-1].x >= (size*size)/2 && (*posZero)[i-1].x >= (size*size)/2 && (*posZero)[move-1].y == (size*size)/2 && (*posZero)[i-1].y == (size*size)/2) && (candidate==(*option)[i][(*nopts)[i]])) break;
+						}
+						if(!(i>=1)) (*option)[move][++((*nopts)[move])] = candidate;
+					}
+
+					if(row && col && sqr && xchk && ychk && type == 4) {
+						for(i = move-1; i >= 1; i--){
+							if(candidate==(*option)[i][(*nopts)[i]] && ((*posZero)[i-1].y==(*posZero)[move-1].y ||
+								(*posZero)[i-1].x==(*posZero)[move-1].x || ((int)((*posZero)[i-1].y/size)==(int)((*posZero)[move-1].y/size) &&
+									(int)((*posZero)[i-1].x/size)==(int)((*posZero)[move-1].x/size)))) break;
+
+							if(((((*posZero)[move-1].x == (*posZero)[move-1].y && (*posZero)[i-1].x == (*posZero)[i-1].y) ||
+								((*posZero)[move-1].x + (*posZero)[move-1].y == (size*size) - 1 && (*posZero)[i-1].x + (*posZero)[i-1].y == (size*size) - 1))) &&
+								(candidate==(*option)[i][(*nopts)[i]])) break;
+
+							if((((*posZero)[move-1].x == (*posZero)[move-1].y && (*posZero)[i-1].x == (*posZero)[i-1].y && (*posZero)[move-1].x < (size*size)/2 && (*posZero)[i-1].x < (size*size)/2) ||
+								((*posZero)[move-1].x + (*posZero)[move-1].y == (size*size) - 1 && (*posZero)[i-1].x + (*posZero)[i-1].y == (size*size) - 1 && (*posZero)[move-1].x < (size*size)/2 && (*posZero)[i-1].x < (size*size)/2)) &&
+								((*posZero)[move-1].x >= (size*size)/2 && (*posZero)[i-1].x >= (size*size)/2 && (*posZero)[move-1].y == (size*size)/2 && (*posZero)[i-1].y == (size*size)/2) && (candidate==(*option)[i][(*nopts)[i]])) break;
 						}
 						if(!(i>=1)) (*option)[move][++((*nopts)[move])] = candidate;
 					}
