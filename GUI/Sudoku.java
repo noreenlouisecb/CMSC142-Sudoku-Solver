@@ -7,7 +7,7 @@ import java.util.*;
 public class Sudoku implements ActionListener{
 	static int[][] puzzle;
 	static String temp;
-	static String regex = "1";
+	static String regex = "[1";
 	static String[] tokens;
 	static int problemCount, size = 0;
 	static Puzzle[] puzzleList;
@@ -98,7 +98,7 @@ public class Sudoku implements ActionListener{
 		for(int i = 2; i <= size*size; i++){
 			regex = regex + Integer.toString(i);
 		}
-
+		regex = regex + "]";
 		gamePanel.setVisible(false);
 		gamePanel.setLayout(new GridLayout(size*size, size*size));
 		buttons = new JButton[size*size][size*size];					
