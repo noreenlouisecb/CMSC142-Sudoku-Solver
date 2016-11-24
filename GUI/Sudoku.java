@@ -6,11 +6,13 @@ import java.util.*;
 
 public class Sudoku implements ActionListener{
 	static int[][] puzzle;
+	static int[][] puzzle2;
 	static String temp;
 	static String regex = "[1";
 	static String[] tokens;
 	static int problemCount, size = 0;
 	static Puzzle[] puzzleList;
+	static Puzzle[] original;
 	static JFrame frame = new JFrame("Sudoku");
 	static JButton[][] buttons;	
 	static int index = 0;	
@@ -26,18 +28,21 @@ public class Sudoku implements ActionListener{
 			temp = br.readLine();
 			problemCount = Integer.parseInt(temp);
 			puzzleList = new Puzzle[problemCount];
-
+			original = new Puzzle[problemCount];
 			for(int k = 0; k < problemCount; k++){
 				temp = br.readLine();
 				size = Integer.parseInt(temp);	
 				puzzle = new int[size*size][size*size];
+				puzzle2 = new int[size*size][size*size];
 				for(int i = 0; i < size*size; i++){
 					temp = br.readLine();
 					tokens = temp.split("[ ]+");
 					for(int j = 0; j < tokens.length; j++){
 						puzzle[i][j] = Integer.parseInt(tokens[j]);
+						puzzle2[i][j] = Integer.parseInt(tokens[j]);
 					}
 				}
+				original[k] = new Puzzle(puzzle2, size);
 				puzzleList[k] = new Puzzle(puzzle, size);
 			}
 			
@@ -59,9 +64,12 @@ public class Sudoku implements ActionListener{
 		buttons[x][y] = new JButton();
 		buttons[x][y].addActionListener(this);		
 		if(input != 0){
-			buttons[x][y].setEnabled(false);	
+			if((original[index].getPuzzle()[x][y]) == puzzleList[index].getPuzzle()[x][y]){
+				buttons[x][y].setEnabled(false);		
+				buttons[x][y].setBackground(Color.black);
+			} else buttons[x][y].setBackground(Color.white);
 			buttons[x][y].setText(Integer.toString(input));			
-			buttons[x][y].setBackground(Color.black);		
+					
 		} else buttons[x][y].setBackground(Color.white);		 	
 
 		if(x == 0) top = 5;
@@ -177,7 +185,7 @@ public class Sudoku implements ActionListener{
 					index--;
 					regex = "[1";
 					setSudoku();		
-				} 
+				}
 			}
 		});
 
