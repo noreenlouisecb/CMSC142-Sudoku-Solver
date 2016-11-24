@@ -1,8 +1,12 @@
+package cmsc142;
+
 import java.io.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+
+import cmsc142.solver.*;
 
 public class Sudoku implements ActionListener{
 	static int[][] puzzle;
@@ -16,6 +20,7 @@ public class Sudoku implements ActionListener{
 	static int index = 0;	
 	static JPanel gamePanel = new JPanel();
 	static JPanel subSquare;
+	static SolverStrategy solver;
 	public static void main(String[] args){
 		
 		initializeGUI();
@@ -43,9 +48,13 @@ public class Sudoku implements ActionListener{
 			
 			br.close();
 
-		} catch(Exception e){}		
+		} catch(Exception e){
+			e.printStackTrace();
+			return;
+		}		
 		
 					
+		solver = new NormalSolver();
 		setSudoku();	
 
 	    frame.setVisible(true);
@@ -180,7 +189,7 @@ public class Sudoku implements ActionListener{
 
 		solve.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				 
+				 solver.solve(puzzleList[index]);
 			}
 		});
 	}
