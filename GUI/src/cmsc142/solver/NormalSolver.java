@@ -1,12 +1,13 @@
 package cmsc142.solver;
 
-import java.util.LinkedList;
-import cmsc142.Puzzle;
 import cmsc142.Point;
+import cmsc142.Puzzle;
 import cmsc142.checker.CheckerStrategy;
-import cmsc142.checker.RowChecker;
 import cmsc142.checker.ColumnChecker;
+import cmsc142.checker.RowChecker;
 import cmsc142.checker.SquareChecker;
+
+import java.util.LinkedList;
 
 public class NormalSolver implements SolverStrategy {
 	protected Puzzle puzzle;
@@ -53,6 +54,8 @@ public class NormalSolver implements SolverStrategy {
 		option = new int[zeroCount + 2][zeroCount + 2];
 		board = puzzle.getPuzzle();
 		zeroPositions = puzzle.getZeroList();
+
+		updateCheckers();
 
 		int start, move;
 		int row, col, sqr, candidate, i, j, k;
