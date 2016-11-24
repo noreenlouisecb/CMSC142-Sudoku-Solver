@@ -81,6 +81,7 @@ public class Sudoku implements ActionListener{
 				if(buttons[i][j].equals(e.getSource())){
 					JOptionPane b = new JOptionPane();
 					String temp = b.showInputDialog(frame, "Input number from 1 - " + (size*size));
+					System.out.println(regex);
 					if(temp != null && temp.matches(regex)){
 						puzzleList[index].setInput(Integer.parseInt(temp), i, j);
 						puzzle[i][j] = Integer.parseInt(temp);
@@ -164,6 +165,7 @@ public class Sudoku implements ActionListener{
 			public void actionPerformed(ActionEvent e){
 				if(index+1 < problemCount){
 					index++;
+					regex = "[1";
 					setSudoku();		
 				} 
 			}
@@ -173,6 +175,7 @@ public class Sudoku implements ActionListener{
 			public void actionPerformed(ActionEvent e){
 				if(index-1 >= 0){
 					index--;
+					regex = "[1";
 					setSudoku();		
 				} 
 			}
