@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Puzzle{
 	public int[][] puzzle;
 	public int size;
-	private Point[] zeroList;
+	private ArrayList<Point> zeroList;
 
 	public Puzzle(int[][] puzzle, int size){
 		this.puzzle = puzzle;
@@ -14,7 +14,7 @@ public class Puzzle{
 	}
 
 	private void countZero() {
-		ArrayList<Point> zeroList = new ArrayList<>();
+		zeroList = new ArrayList<>();
 		int totalSize = size*size;
 		for(int ii = 0; ii < totalSize; ii++) {
 			for(int jj = 0; jj < totalSize; jj++) {
@@ -23,12 +23,10 @@ public class Puzzle{
 				}
 			}
 		}
-
-		this.zeroList = zeroList.toArray(new Point[1]);
 	}
 
 	public int getZeroCount() {
-		return zeroList.length;
+		return zeroList.size();
 	}
 
 	public int[][] getPuzzle(){
@@ -40,11 +38,21 @@ public class Puzzle{
 	}
 
 	public Point[] getZeroList() {
-		return zeroList;
+		return zeroList.toArray(new Point[1]);
 	}
 
-	public void setInput(int x, int i, int j){
-		this.puzzle[i][j] = x;
+	public void setInput(int x, int ii, int jj){
+		if (x == 0 && puzzle[ii][jj] != 0) {
+			zeroList.add(new Point(jj, ii));
+		} else if (x != 0 && puzzle[ii][jj] == 0) {
+			for(int kk = 0; kk < zeroList.size(); kk++) {
+				if (zeroList.get(kk).x == jj && zeroList.get(kk).y == ii) {
+					zeroList.remove(kk);
+					break;
+				}
+			}
+		}
+		this.puzzle[ii][jj] = x;
 	}
 
 	/*
