@@ -5,17 +5,35 @@ import cmsc142.Puzzle;
 import cmsc142.Point;
 import cmsc142.checker.CheckerStrategy;
 
-public abstract class SolverStrategy {
-	protected Puzzle puzzle;
-	protected int[] nopts;
-	protected int[][] option;
-	protected int[][] board;
-	protected Point[] zeroPositions;
-	protected CheckerStrategy[] checkers;
+public class SolverStrategy {
+	private Puzzle puzzle;
+	private int[] nopts;
+	private int[][] option;
+	private int[][] board;
+	private Point[] zeroPositions;
+	private CheckerStrategy[] checkers;
 
+	private boolean alignCheck(int offset1, int offset2) {
+		for(CheckerStrategy checker: checkers) {
+			if (checker.alignCheck(zeroPositions[offset1], zeroPositions[offset2])) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-	protected abstract boolean alignCheck(int offset1, int offset2);
-	public abstract boolean candidateCheck(int candidate, Point p);
+	public void changeCheckers(CheckerStrategy[] checkers) {
+		this.checkers = checkers;
+	}
+
+	public boolean candidateCheck(int candidate, Point p) {
+		for(CheckerStrategy checker: checkers) {
+			if (!checker.candidateCheck(candidate, p)) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	private void updateCheckers() {
 		for(CheckerStrategy checker: checkers) {

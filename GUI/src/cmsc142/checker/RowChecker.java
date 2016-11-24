@@ -13,6 +13,6 @@ public class RowChecker extends CheckerStrategy {
 	}
 
 	public boolean alignCheck(Point p1, Point p2) {
-		return true;
+		return p1.y==p2.y;
 	}
 }

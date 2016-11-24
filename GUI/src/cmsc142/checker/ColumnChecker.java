@@ -13,6 +13,6 @@ public class ColumnChecker extends CheckerStrategy {
 	}
 
 	public boolean alignCheck(Point p1, Point p2) {
-		return true;
+		return p1.x==p2.x;
 	}
 }

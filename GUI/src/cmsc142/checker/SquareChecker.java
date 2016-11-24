@@ -18,6 +18,7 @@ public class SquareChecker extends CheckerStrategy {
 	}
 
 	public boolean alignCheck(Point p1, Point p2) {
-		return true;
+		return ((int)(p1.y/size)==(int)(p2.y/size) &&
+			(int)(p1.x/size)==(int)(p2.x/size));
 	}
 }

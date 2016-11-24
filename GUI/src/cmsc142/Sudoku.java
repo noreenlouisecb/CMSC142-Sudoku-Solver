@@ -7,6 +7,7 @@ import java.awt.event.*;
 import java.util.*;
 
 import cmsc142.solver.*;
+import cmsc142.checker.CheckerGenerator;
 
 public class Sudoku implements ActionListener{
 	static int[][] puzzle;
@@ -54,7 +55,8 @@ public class Sudoku implements ActionListener{
 		}		
 		
 					
-		solver = new NormalSolver();
+		solver = new SolverStrategy();
+		solver.changeCheckers(CheckerGenerator.NormalChecking());
 		setSudoku();	
 
 	    frame.setVisible(true);
