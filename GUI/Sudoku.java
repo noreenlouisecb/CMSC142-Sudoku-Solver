@@ -132,38 +132,57 @@ public class Sudoku implements ActionListener{
 	}
 
 	public static void initializeGUI(){
-		frame.setSize(500, 500);
+		frame.setSize(700, 500);
 		frame.setLayout(new BorderLayout(5,5));
-		gamePanel.setSize(400,450);			
+		gamePanel.setSize(400,550);			
 
 		JPanel navBar = new JPanel();
 		JPanel solveContainer = new JPanel();
+		JPanel solve2Container = new JPanel();
 		JPanel prevContainer = new JPanel();
 		JPanel nextContainer = new JPanel();
 		JButton solve = new JButton();
+		JButton solveX = new JButton();
+		JButton solveY = new JButton();
+		JButton solveXY = new JButton();
 		JButton next = new JButton();
 		JButton prev = new JButton();
-		navBar.setLayout(new GridLayout(1,3));
-
+		navBar.setLayout(new GridLayout(1,4));
+		
+		solve2Container.setLayout(new GridLayout(1, 3));
 		solve.setText("Solve");
+		solveX.setText("X");
+		solveY.setText("Y");
+		solveXY.setText("XY");
 		prev.setText("Prev");
 		next.setText("Next");
 		solve.setVisible(true);
+		solveX.setVisible(true);
+		solveY.setVisible(true);
+		solveXY.setVisible(true);
 		prev.setVisible(true);
 		next.setVisible(true);
-		solve.setBounds(10, 10, 100, 50);		
+		solve.setBounds(10, 10, 100, 50);
+		solveX.setBounds(10, 10, 100, 50);
+		solveY.setBounds(10, 10, 100, 50);
+		solveXY.setBounds(10, 10, 100, 50);		
 		next.setBounds(10, 10, 100, 50);		
 		prev.setBounds(10, 10, 100, 50);		
 	
 		solveContainer.setVisible(true);
+		solve2Container.setVisible(true);
 		prevContainer.setVisible(true);
 		nextContainer.setVisible(true);
 		prevContainer.add(prev);
 		solveContainer.add(solve);
+		solve2Container.add(solveX);
+		solve2Container.add(solveY);
+		solve2Container.add(solveXY);
 		nextContainer.add(next);
 		
 		navBar.add(prevContainer);
 		navBar.add(solveContainer);
+		navBar.add(solve2Container);
 		navBar.add(nextContainer);
 
 		frame.add(navBar, BorderLayout.PAGE_START);
@@ -190,6 +209,24 @@ public class Sudoku implements ActionListener{
 		});
 
 		solve.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				 
+			}
+		});
+
+		solveX.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				 
+			}
+		});
+
+		solveY.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				 
+			}
+		});
+
+		solveXY.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				 
 			}
