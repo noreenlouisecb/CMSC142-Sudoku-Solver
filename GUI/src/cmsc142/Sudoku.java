@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.LinkedList;
 
 public class Sudoku implements ActionListener{
 	static int[][] puzzle;
@@ -230,8 +231,14 @@ public class Sudoku implements ActionListener{
 
 		solve.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				solutionsView.changeSolutions(solver.solve(puzzleList[index]));
-				solutionsView.setVisible(true);
+				LinkedList<int[][]> solutions = solver.solve(puzzleList[index]);
+				if (solutions.size() > 0) {
+					solutionsView.changeSolutions(solutions);
+					solutionsView.setVisible(true);
+				} else {
+					solutionsView.setVisible(false);
+					JOptionPane.showMessageDialog(frame, "No solutions found");
+				}
 			}
 		});
 

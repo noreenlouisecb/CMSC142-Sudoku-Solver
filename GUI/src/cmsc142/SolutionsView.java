@@ -61,7 +61,6 @@ public class SolutionsView extends JFrame {
 
 	public void changeSolutions(LinkedList<int[][]> solutions) {
 		this.solutions = solutions;
-		currentlyShown = 0;
 		updateBoard(0);
 	}
 
@@ -70,7 +69,6 @@ public class SolutionsView extends JFrame {
 		if (newIndex < 0 || newIndex >= solutions.size()) {
 			return;
 		}
-
 		currentlyShown = newIndex;
 
 		int[][] solution = solutions.get(currentlyShown);
