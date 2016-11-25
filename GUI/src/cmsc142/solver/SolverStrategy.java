@@ -1,9 +1,10 @@
 package cmsc142.solver;
 
-import java.util.LinkedList;
-import cmsc142.Puzzle;
 import cmsc142.Point;
+import cmsc142.Puzzle;
 import cmsc142.checker.CheckerStrategy;
+
+import java.util.LinkedList;
 
 public class SolverStrategy {
 	private Puzzle puzzle;
@@ -45,10 +46,28 @@ public class SolverStrategy {
 		this.puzzle = puzzle;
 	}
 
+	private void printPuzzle(int[][] board, int sideSize) {
+        int i, j, k;
+        for(k = 1, i = 0; i < sideSize; i++){
+        for(j = 0;j < sideSize; j++){
+            if(board[i][j] == 0) {
+                System.out.format("%3d", option[k][nopts[k]]);
+                k++;
+            }
+            else{
+                System.out.format("%3d", board[i][j]);
+            }
+        }
+        System.out.print('\n');
+    }
+	}
 	public LinkedList<int[][]> solve() {
+		int size = puzzle.getSize();
+		int sideSize = size*size;
 		int zeroCount = puzzle.getZeroCount();
+
 		nopts = new int[zeroCount + 2];
-		option = new int[zeroCount + 2][zeroCount + 2];
+		option = new int[zeroCount + 2][sideSize + 2];
 		board = puzzle.getPuzzle();
 		zeroPositions = puzzle.getZeroList();
 
@@ -57,13 +76,23 @@ public class SolverStrategy {
 		int start, move;
 		int candidate, i, j, k;
 		start = move = 0;
-		int size = puzzle.getSize();
 		nopts[start] = 1;
 		LinkedList<int[][]> solutions = new LinkedList<>();
 		int[][] solutionHolder;
-		int sideSize = size*size;
+        System.out.print("\033[H\033[2J");
+		System.out.flush();
 
 		while (nopts[start] > 0) {
+            /*
+			System.out.print("\033[H\033[2J");
+			System.out.flush();
+            printPuzzle(board, sideSize);
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			 */
 			if(nopts[move] > 0) {
 				move++;
 				nopts[move] = 0;

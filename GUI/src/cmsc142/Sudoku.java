@@ -1,13 +1,14 @@
 package cmsc142;
 
-import java.io.*;
+import cmsc142.checker.CheckerGenerator;
+import cmsc142.solver.SolverStrategy;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-
-import cmsc142.solver.*;
-import cmsc142.checker.CheckerGenerator;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class Sudoku implements ActionListener{
 	static int[][] puzzle;
@@ -24,12 +25,13 @@ public class Sudoku implements ActionListener{
 	static JPanel gamePanel = new JPanel();
 	static JPanel subSquare;
 	static SolverStrategy solver;
+	static SolutionsView solutionsView = new SolutionsView("Solutions");
 	public static void main(String[] args){
 		
 		initializeGUI();
 		
 		try{
-			BufferedReader br = new BufferedReader(new FileReader("../input2.txt"));
+			BufferedReader br = new BufferedReader(new FileReader("../input1.txt"));
 
 			temp = br.readLine();
 			problemCount = Integer.parseInt(temp);
@@ -59,13 +61,15 @@ public class Sudoku implements ActionListener{
 			return;
 		}		
 		
-					
+
 		solver = new SolverStrategy();
 		solver.changeCheckers(CheckerGenerator.NormalChecking());
 		setSudoku();	
 
 	    frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		solutionsView.setVisible(true);
 	}
 	
 
@@ -226,25 +230,26 @@ public class Sudoku implements ActionListener{
 
 		solve.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				 solver.solve(puzzleList[index]);
+				solutionsView.changeSolutions(solver.solve(puzzleList[index]));
+				solutionsView.setVisible(true);
 			}
 		});
 
 		solveX.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				 
+				 solver.changeCheckers(CheckerGenerator.XChecking());
 			}
 		});
 
 		solveY.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				 
+				solver.changeCheckers(CheckerGenerator.YChecking());
 			}
 		});
 
 		solveXY.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				 
+				solver.changeCheckers(CheckerGenerator.XYChecking());
 			}
 		});
 	}

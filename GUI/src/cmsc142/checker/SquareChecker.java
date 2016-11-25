@@ -9,7 +9,7 @@ public class SquareChecker extends CheckerStrategy {
 		int yPos = (int)(p.y/size) * size;
 		for(int i = yPos; i < (yPos + size); i++){
 			for(int j = xPos; j < (xPos + size) ;j++) {
-				if(candidate == this.puzzle[j][i])
+				if(candidate == this.puzzle[i][j])
 					return false;
 			}
 		}

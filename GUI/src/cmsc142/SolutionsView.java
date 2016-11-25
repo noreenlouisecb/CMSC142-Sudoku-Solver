@@ -1,9 +1,9 @@
 package cmsc142;
 
-import java.io.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.LinkedList;
 
 public class SolutionsView extends JFrame {
@@ -62,6 +62,7 @@ public class SolutionsView extends JFrame {
 	public void changeSolutions(LinkedList<int[][]> solutions) {
 		this.solutions = solutions;
 		currentlyShown = 0;
+		updateBoard(0);
 	}
 
 	private void updateBoard(int increment) {
@@ -81,8 +82,8 @@ public class SolutionsView extends JFrame {
 		JLabel[][] labels = new JLabel[sideSize][sideSize];					
 		for(int i = 0; i < sideSize; i++){
 			for(int j = 0; j < sideSize; j++){
-				gamePanel.add(labels[i][j]);			
-				labels[i][j].setText(Integer.toString(solution[i][j]));
+                labels[i][j] = new JLabel(Integer.toString(solution[i][j]));
+				gamePanel.add(labels[i][j]);
 			}
 		}
 

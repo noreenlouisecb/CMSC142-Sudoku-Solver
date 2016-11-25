@@ -1,13 +1,11 @@
 package cmsc142.checker;
 
-import cmsc142.Puzzle;
 import cmsc142.Point;
 
 public class ColumnChecker extends CheckerStrategy {
 	public boolean candidateCheck(int candidate, Point p) {
 		for(int i = 0; i < this.size*this.size; i++){
-			if(i == p.x) continue;
-			if(candidate == this.puzzle[i][p.y]) return false;
+			if(candidate == this.puzzle[p.y][i]) return false;
 		}
 		return true;
 	}
