@@ -45,7 +45,7 @@ public class SolverStrategy {
 		this.puzzle = puzzle;
 	}
 
-	public LinkedList<Puzzle> solve() {
+	public LinkedList<int[][]> solve() {
 		int zeroCount = puzzle.getZeroCount();
 		nopts = new int[zeroCount + 2];
 		option = new int[zeroCount + 2][zeroCount + 2];
@@ -55,40 +55,41 @@ public class SolverStrategy {
 		updateCheckers();
 
 		int start, move;
-		int row, col, sqr, candidate, i, j, k;
-		int solutionCount = 0;
+		int candidate, i, j, k;
 		start = move = 0;
 		int size = puzzle.getSize();
 		nopts[start] = 1;
-		System.out.format("%d\n", size);
+		LinkedList<int[][]> solutions = new LinkedList<>();
+		int[][] solutionHolder;
+		int sideSize = size*size;
+
 		while (nopts[start] > 0) {
 			if(nopts[move] > 0) {
 				move++;
 				nopts[move] = 0;
 				if(move == zeroCount+1) {
-					solutionCount++;
-					for(k = 1, i = 0; i < size*size; i++){
-						for(j = 0;j < size*size; j++){
+					solutionHolder = new int[sideSize][sideSize];
+					solutions.add(solutionHolder);
+					for(k = 1, i = 0; i < sideSize; i++){
+						for(j = 0;j < sideSize; j++){
 							if(board[i][j] == 0) {
-								System.out.format("%d ", option[k][nopts[k]]);
+								solutionHolder[i][j] = option[k][nopts[k]];
 								k++;
 							}
 							else{
-								System.out.format("%d ", board[i][j]);
+								solutionHolder[i][j] = board[i][j];
 							}
 						}
-						System.out.format("\n");
 					}
-					System.out.format("\n");
 				} else if(move == 1) {
-					for(candidate = size*size; candidate >=1; candidate --) {
+					for(candidate = sideSize; candidate >=1; candidate --) {
 						if(candidateCheck(candidate, zeroPositions[move-1])) {
 							nopts[move]++;
 							option[move][nopts[move]] = candidate;
 						}
 					}
 				} else{
-					for(candidate=size*size; candidate >= 1; candidate--) {
+					for(candidate=sideSize; candidate >= 1; candidate--) {
 						if(candidateCheck(candidate, zeroPositions[move-1])) {
 							for(i = move-1; i >= 1;i--)
 							if(candidate==option[i][nopts[i]] && alignCheck(i-1, move-1)) break;
@@ -101,11 +102,11 @@ public class SolverStrategy {
 				nopts[move]--;
 			}
 		}
-		System.out.println("Solutions: " + solutionCount);
-		return null;
+		System.out.println("Solutions: " + solutions.size());
+		return solutions;
 	}
 
-	public LinkedList<Puzzle> solve(Puzzle puzzle) {
+	public LinkedList<int[][]> solve(Puzzle puzzle) {
 		this.puzzle = puzzle;
 		return this.solve();
 	}

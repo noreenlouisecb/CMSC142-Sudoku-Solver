@@ -1,6 +1,5 @@
 package cmsc142.checker;
 
-import cmsc142.Puzzle;
 import cmsc142.Point;
 
 public class SquareChecker extends CheckerStrategy {
@@ -8,9 +7,9 @@ public class SquareChecker extends CheckerStrategy {
 		int size = this.size;
 		int xPos = (int)(p.x/size) * size;
 		int yPos = (int)(p.y/size) * size;
-		for(int i = yPos; i < (size*yPos); i++){
-			for(int j = xPos; j < (size*xPos) ;j++) {
-				if(candidate == this.puzzle[p.x][i])
+		for(int i = yPos; i < (yPos + size); i++){
+			for(int j = xPos; j < (xPos + size) ;j++) {
+				if(candidate == this.puzzle[j][i])
 					return false;
 			}
 		}

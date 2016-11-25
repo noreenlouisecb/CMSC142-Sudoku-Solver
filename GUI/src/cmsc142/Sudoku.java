@@ -139,7 +139,6 @@ public class Sudoku implements ActionListener{
 			}System.out.println();
 		}		
 		gamePanel.setVisible(true);
-		frame.add(gamePanel, BorderLayout.CENTER);	
 	}
 
 	public static void initializeGUI(){
@@ -197,6 +196,7 @@ public class Sudoku implements ActionListener{
 		navBar.add(nextContainer);
 
 		frame.add(navBar, BorderLayout.PAGE_START);
+		frame.add(gamePanel, BorderLayout.CENTER);	
 	
 
 		next.addActionListener(new ActionListener(){
