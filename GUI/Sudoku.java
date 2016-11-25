@@ -8,7 +8,7 @@ public class Sudoku implements ActionListener{
 	static int[][] puzzle;
 	static int[][] puzzle2;
 	static String temp;
-	static String regex = "[1";
+	static String regex = "(1";
 	static String[] tokens;
 	static int problemCount, size = 0;
 	static Puzzle[] puzzleList;
@@ -23,7 +23,7 @@ public class Sudoku implements ActionListener{
 		initializeGUI();
 		
 		try{
-			BufferedReader br = new BufferedReader(new FileReader("../input1.txt"));
+			BufferedReader br = new BufferedReader(new FileReader("../input2.txt"));
 
 			temp = br.readLine();
 			problemCount = Integer.parseInt(temp);
@@ -88,12 +88,17 @@ public class Sudoku implements ActionListener{
 			for(int j = 0; j < size*size; j++){
 				if(buttons[i][j].equals(e.getSource())){
 					JOptionPane b = new JOptionPane();
-					String temp = b.showInputDialog(frame, "Input number from 1 - " + (size*size));
+					String temp = b.showInputDialog(frame, "Input number from 1 - " + (size*size) + " (0 to clear)");
 					System.out.println(regex);
 					if(temp != null && temp.matches(regex)){
 						puzzleList[index].setInput(Integer.parseInt(temp), i, j);
 						puzzle[i][j] = Integer.parseInt(temp);
 						buttons[i][j].setText(temp);	
+					}
+					if(temp.equals("0")){
+						puzzleList[index].setInput(Integer.parseInt(temp), i, j);
+						buttons[i][j].setText("");
+						puzzle[i][j] = Integer.parseInt(temp);
 					}
 				}
 			}
@@ -105,9 +110,9 @@ public class Sudoku implements ActionListener{
 		size = puzzleList[index].getSize();
 
 		for(int i = 2; i <= size*size; i++){
-			regex = regex + Integer.toString(i);
+			regex = regex + "|" + Integer.toString(i);
 		}
-		regex = regex + "]";
+		regex = regex + ")";
 		gamePanel.setVisible(false);
 		gamePanel.setLayout(new GridLayout(size*size, size*size));
 		buttons = new JButton[size*size][size*size];					
@@ -192,7 +197,7 @@ public class Sudoku implements ActionListener{
 			public void actionPerformed(ActionEvent e){
 				if(index+1 < problemCount){
 					index++;
-					regex = "[1";
+					regex = "(1";
 					setSudoku();		
 				} 
 			}
@@ -202,7 +207,7 @@ public class Sudoku implements ActionListener{
 			public void actionPerformed(ActionEvent e){
 				if(index-1 >= 0){
 					index--;
-					regex = "[1";
+					regex = "(1";
 					setSudoku();		
 				}
 			}
