@@ -111,7 +111,7 @@ public class Sudoku implements ActionListener{
 						puzzle[i][j] = Integer.parseInt(temp);
 						buttons[i][j].setText(temp);	
 					}
-					if(temp.equals("0")){
+					if(temp != null && temp.equals("0")){
 						puzzleList[index].setInput(Integer.parseInt(temp), i, j);
 						buttons[i][j].setText("");
 						puzzle[i][j] = Integer.parseInt(temp);
@@ -136,7 +136,7 @@ public class Sudoku implements ActionListener{
 		for(int i = 0; i < size*size; i++){
 			for(int j = 0; j < size*size; j++){
 				Sudoku temp = new Sudoku(i, j, puzzle[i][j]);
-				gamePanel.add(buttons[i][j]);			
+				gamePanel.add(buttons[i][j]);
 			}
 		}
 
@@ -152,7 +152,7 @@ public class Sudoku implements ActionListener{
 	}
 
 	public static void initializeGUI(){
-		frame.setSize(700, 500);
+		frame.setSize(850, 500);
 		frame.setLayout(new BorderLayout(5,5));
 		gamePanel.setSize(400,550);			
 
@@ -162,6 +162,7 @@ public class Sudoku implements ActionListener{
 		JPanel prevContainer = new JPanel();
 		JPanel nextContainer = new JPanel();
 		JButton solve = new JButton();
+		JButton solveReg = new JButton();
 		JButton solveX = new JButton();
 		JButton solveY = new JButton();
 		JButton solveXY = new JButton();
@@ -169,13 +170,15 @@ public class Sudoku implements ActionListener{
 		JButton prev = new JButton();
 		navBar.setLayout(new GridLayout(1,4));
 		
-		solve2Container.setLayout(new GridLayout(1, 3));
+		solve2Container.setLayout(new GridLayout(1, 4));
 		solve.setText("Solve");
+		solveReg.setText("R");
 		solveX.setText("X");
 		solveY.setText("Y");
 		solveXY.setText("XY");
 		prev.setText("Prev");
 		next.setText("Next");
+		solveReg.setVisible(true);
 		solve.setVisible(true);
 		solveX.setVisible(true);
 		solveY.setVisible(true);
@@ -183,9 +186,10 @@ public class Sudoku implements ActionListener{
 		prev.setVisible(true);
 		next.setVisible(true);
 		solve.setBounds(10, 10, 100, 50);
+		solveReg.setBounds(10, 10, 150, 50);
 		solveX.setBounds(10, 10, 100, 50);
 		solveY.setBounds(10, 10, 100, 50);
-		solveXY.setBounds(10, 10, 100, 50);		
+		solveXY.setBounds(10, 10, 150, 50);
 		next.setBounds(10, 10, 100, 50);		
 		prev.setBounds(10, 10, 100, 50);		
 	
@@ -195,6 +199,7 @@ public class Sudoku implements ActionListener{
 		nextContainer.setVisible(true);
 		prevContainer.add(prev);
 		solveContainer.add(solve);
+		solve2Container.add(solveReg);
 		solve2Container.add(solveX);
 		solve2Container.add(solveY);
 		solve2Container.add(solveXY);
@@ -257,6 +262,12 @@ public class Sudoku implements ActionListener{
 		solveXY.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				solver.changeCheckers(CheckerGenerator.XYChecking());
+			}
+		});
+
+		solveReg.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				solver.changeCheckers(CheckerGenerator.NormalChecking());
 			}
 		});
 	}

@@ -10,6 +10,7 @@ public class SolutionsView extends JFrame {
 	private LinkedList<int[][]> solutions = new LinkedList<>();
 	private int currentlyShown = 0;
 	private JPanel gamePanel = new JPanel();
+    private JLabel countLabel = new JLabel();
 
 	private class SequenceButtonListener implements ActionListener {
 		private int increment;
@@ -41,14 +42,16 @@ public class SolutionsView extends JFrame {
 		prev.setVisible(true);
 		next.setVisible(true);
 		next.setBounds(10, 10, 100, 50);		
-		prev.setBounds(10, 10, 100, 50);		
-	
+		prev.setBounds(10, 10, 100, 50);
+		countLabel.setBounds(10, 10, 200, 50);
+
 		prevContainer.setVisible(true);
 		nextContainer.setVisible(true);
 		prevContainer.add(prev);
 		nextContainer.add(next);
 		
 		navBar.add(prevContainer);
+        navBar.add(countLabel);
 		navBar.add(nextContainer);
 
 		this.add(navBar, BorderLayout.PAGE_START);
@@ -70,6 +73,7 @@ public class SolutionsView extends JFrame {
 			return;
 		}
 		currentlyShown = newIndex;
+		countLabel.setText((currentlyShown + 1 )+ "/" + solutions.size());
 
 		int[][] solution = solutions.get(currentlyShown);
 		gamePanel.removeAll();
