@@ -46,9 +46,21 @@ public class YChecker extends CheckerStrategy {
 
 	public boolean alignCheck(Point p1, Point p2) {
 		if(size % 2 == 0) return false;
+
 		int totalSize = size*size;
 		int center = totalSize/2;
-		return ( (p1.y > center && p1.x == center) || (p1.y <= center && (p1.y == p1.x || p1.x + p1.y == size - 1))) && 
-			( (p2.y > center && p2.x == center) || (p2.y <= center && (p2.y == p2.x || p2.x + p2.y == size - 1)));
+
+		if (p1.y < center) {
+			if (p1.x == p1.y) {
+				return (p2.x == p2.y && p2.y < center) || (p2.y >= center && p2.x == center);
+			} else if (p1.x + p1.y == totalSize - 1) {
+				return (p2.x + p2.y == totalSize - 1 && p2.y < center) || (p2.y >= center && p2.x == center);
+			}
+		} else if (p1.x == size*size/2) {
+			return (p2.x == p2.y && p2.y < center) || (p2.y >= center && p2.x == center) ||
+				(p2.x + p2.y == totalSize - 1 && p2.y < center);
+		}
+
+		return false;
 	}
 }
