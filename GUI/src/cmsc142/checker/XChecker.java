@@ -20,7 +20,7 @@ public class XChecker extends CheckerStrategy {
 	}
 
 	public boolean alignCheck(Point p1, Point p2) {
-		return (p1.x == p1.y || p1.x + p1.y == size - 1) && 
-			(p2.x == p2.y || p2.x + p2.y == size - 1);
+		return (p1.x == p1.y && p2.x == p2.y) || 
+			(p1.x + p1.y == size - 1) && (p2.x + p2.y == size - 1);
 	}
 }
